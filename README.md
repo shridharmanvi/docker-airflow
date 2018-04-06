@@ -118,3 +118,11 @@ You can also use this to run a bash shell or any other command in the same envir
 # Wanna help?
 
 Fork, improve and PR. ;-)
+
+## Shri's notes:
+
+1. Modified dockerfile to build on python2.7 base image
+2. Added a new custom yaml file with some minor changes to image being used for webserver. Added build instead of pull. Use this one for work related testing.
+3. Build using `docker-compose -f docker-compose-customBuild.yml up -d`
+4. Destroy using `docker-compose -f docker-compose-customBuild.yml down`
+5. Make a folder called airflow_code in `pwd` and add dags, tasks, settings.py, operators and lib folders here. This folder will be mounted onto `/usr/local/airflow` in the container making all DAGs and code available to airflow 

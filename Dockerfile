@@ -4,15 +4,15 @@
 # BUILD: docker build --rm -t puckel/docker-airflow .
 # SOURCE: https://github.com/puckel/docker-airflow
 
-FROM python:3.6-slim
-MAINTAINER Puckel_
+FROM python:2.7-slim
+MAINTAINER manvishri
 
 # Never prompts the user for choices on installation/configuration of packages
 ENV DEBIAN_FRONTEND noninteractive
 ENV TERM linux
 
 # Airflow
-ARG AIRFLOW_VERSION=1.9.0
+ARG AIRFLOW_VERSION=1.8.1
 ARG AIRFLOW_HOME=/usr/local/airflow
 
 # Define en_US.
@@ -24,7 +24,7 @@ ENV LC_MESSAGES en_US.UTF-8
 
 RUN set -ex \
     && buildDeps=' \
-        python3-dev \
+        python-dev \
         libkrb5-dev \
         libsasl2-dev \
         libssl-dev \
@@ -39,8 +39,8 @@ RUN set -ex \
     && apt-get upgrade -yqq \
     && apt-get install -yqq --no-install-recommends \
         $buildDeps \
-        python3-pip \
-        python3-requests \
+        python-pip \
+        python-requests \
         mysql-client \
         mysql-server \
         libmysqlclient-dev \
@@ -71,8 +71,12 @@ RUN set -ex \
         /usr/share/doc \
         /usr/share/doc-base
 
+
 COPY script/entrypoint.sh /entrypoint.sh
 COPY config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
+COPY script/requirements.txt /requirements.txt
+
+RUN pip install -r /requirements.txt
 
 RUN chown -R airflow: ${AIRFLOW_HOME}
 
